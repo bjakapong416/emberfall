@@ -227,13 +227,12 @@ action("Walk", {
     13: {"root": (0, 0, 0, 0.03)},
     17: {"leg.L": (-30, 0, 0, 0), "leg.R": (30, 0, 0, 0), "arm.L": (18, 0, 0, 0), "arm.R": (-24, 0, 0, 0)},
 })
-action("Attack", {   # raise bow, draw, release
-    1: {},
-    4: {"arm.L": (-80, 0, 0, 0), "arm.R": (-70, 0, 20, 0), "body": (0, 0, 18, 0)},
-    8: {"arm.L": (-85, 0, 0, 0), "arm.R": (-55, 0, 35, 0), "body": (0, 0, 22, 0)},
-    10: {"arm.L": (-85, 0, 0, 0), "arm.R": (-30, 0, 10, 0), "body": (0, 0, 18, 0)},
-    13: {},
-})
+action("Attack", {   # upright archer: raise bow, draw the string back, release - no body lean
+        1: {},
+        4: {"arm.L": (-84, 0, 0, 0), "arm.R": (-80, 0, 0, 0), "body": (0, 8, 0, 0)},
+        8: {"arm.L": (-86, 0, 0, 0), "arm.R": (-52, 0, 0, 0), "body": (0, 12, 0, 0)},
+        10: {"arm.L": (-86, 0, 0, 0), "arm.R": (-28, 0, 0, 0), "body": (0, 12, 0, 0)},
+        13: {}})
 rig.animation_data.action = bpy.data.actions["Idle"]
 
 out = os.path.join(os.path.dirname(os.path.abspath(__file__)), "ranger_model.blend")

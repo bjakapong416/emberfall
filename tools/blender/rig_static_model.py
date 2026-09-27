@@ -116,28 +116,73 @@ for sd, k in (("L", 1), ("R", -1)):
 segs = {n: (np.array(b.head), np.array(b.tail)) for n, b in EB.items() if n != "root"}
 bpy.ops.object.mode_set(mode="OBJECT")
 
-# --- distance-based skin weights (inverse distance to bone segments, top 2) ---
+# --- skin weights: Blender heat weighting (clean arm/torso separation), distance weights as fallback ---
 names = list(segs)
-D = np.zeros((len(co), len(names)))
-for j, n in enumerate(names):
-    a, b = segs[n]; ab = b - a
-    t = np.clip(((co - a) @ ab) / (ab @ ab), 0, 1)
-    D[:, j] = np.linalg.norm(co - (a + t[:, None] * ab), axis=1)
-# the head bone owns everything above the neck; legs never own the upper body
-D[co[:, 2] > neck + 0.02 * H, :] += 10; D[co[:, 2] > neck + 0.02 * H, names.index("head")] = 0
-for n in ("leg.L", "leg.R"):
-    D[co[:, 2] > hip + 0.03 * H, names.index(n)] += 10
-W = 1.0 / np.maximum(D, 1e-4) ** 4
-keep = np.argsort(-W, axis=1)[:, :2]
-groups = {n: body.vertex_groups.new(name=n) for n in names}
-Wn = np.take_along_axis(W, keep, 1); Wn /= Wn.sum(1, keepdims=True)
-for j, n in enumerate(names):
-    for c in (0, 1):
-        idx = np.nonzero(keep[:, c] == j)[0]
-        for i in idx:
-            groups[n].add([int(i)], float(Wn[i, c]), "REPLACE")
-mod = body.modifiers.new("Armature", "ARMATURE"); mod.object = rig
-body.parent = rig
+def distance_weights():
+    for vg in list(body.vertex_groups):
+        body.vertex_groups.remove(vg)
+    D = np.zeros((len(co), len(names)))
+    for j, n in enumerate(names):
+        a, b = segs[n]; ab = b - a
+        t = np.clip(((co - a) @ ab) / (ab @ ab), 0, 1)
+        D[:, j] = np.linalg.norm(co - (a + t[:, None] * ab), axis=1)
+    D[co[:, 2] > neck + 0.02 * H, :] += 10; D[co[:, 2] > neck + 0.02 * H, names.index("head")] = 0
+    for n in ("leg.L", "leg.R"):
+        D[co[:, 2] > hip + 0.03 * H, names.index(n)] += 10
+    W = 1.0 / np.maximum(D, 1e-4) ** 4
+    keep = np.argsort(-W, axis=1)[:, :2]
+    groups = {n: body.vertex_groups.new(name=n) for n in names}
+    Wn = np.take_along_axis(W, keep, 1); Wn /= Wn.sum(1, keepdims=True)
+    for j, n in enumerate(names):
+        for c in (0, 1):
+            for i in np.nonzero(keep[:, c] == j)[0]:
+                groups[n].add([int(i)], float(Wn[i, c]), "REPLACE")
+    mod = body.modifiers.new("Armature", "ARMATURE"); mod.object = rig
+    body.parent = rig
+
+bpy.ops.object.select_all(action="DESELECT")
+bpy.context.view_layer.objects.active = body; body.select_set(True)
+bpy.ops.object.mode_set(mode="EDIT"); bpy.ops.mesh.select_all(action="SELECT"); bpy.ops.mesh.remove_doubles(threshold=0.0005); bpy.ops.object.mode_set(mode="OBJECT")
+co = np.empty(len(body.data.vertices) * 3); body.data.vertices.foreach_get("co", co); co = co.reshape(-1, 3)
+rig.select_set(True); bpy.context.view_layer.objects.active = rig
+heat_ok = False
+try:
+    bpy.ops.object.parent_set(type="ARMATURE_AUTO")
+    unweighted = sum(1 for v in body.data.vertices if not any(g.weight > 0.01 for g in v.groups))
+    heat_ok = unweighted < 0.03 * len(body.data.vertices)
+    print(f"rig_static_model: heat weights, unweighted vertices {unweighted}/{len(body.data.vertices)}")
+except Exception as e:
+    print("rig_static_model: heat weighting failed:", e)
+if not heat_ok:
+    body.parent = None
+    for m in list(body.modifiers):
+        if m.type == "ARMATURE": body.modifiers.remove(m)
+    distance_weights(); print("rig_static_model: using distance weights")
+
+# arms touching the tunic drag the cloth up when raised: below the shoulders, inside the torso width, arms have no say
+if heat_ok:
+    zz, xx = co[:, 2], co[:, 0]
+    torso = np.nonzero((np.abs(xx) < 0.8 * handx) & (zz < neck - 0.05 * H) & (zz > 0.12 * H))[0]
+    vg_body, arm_idx = body.vertex_groups["body"], [body.vertex_groups[n].index for n in ("arm.L", "arm.R")]
+    moved = 0
+    for i in torso:
+        v = body.data.vertices[int(i)]
+        w = sum(g.weight for g in v.groups if g.group in arm_idx)
+        if w > 0:
+            for n in ("arm.L", "arm.R"):
+                body.vertex_groups[n].remove([int(i)])
+            vg_body.add([int(i)], w + sum(g.weight for g in v.groups if g.group == vg_body.index), "REPLACE"); moved += 1
+    print(f"rig_static_model: {moved} torso vertices freed from arm influence")
+
+# a hand-held bow must follow the hand rigidly (its lower limb sits next to the leg bones)
+if A["attack"] == "bow":
+    zz, xx = co[:, 2], co[:, 0]
+    bow = ((zz < 0.28 * H) & (xx > legx + 0.08 * H / 1.1)) | ((zz >= 0.28 * H) & (zz < neck) & (xx > handx * 0.97))
+    idx = [int(i) for i in np.nonzero(bow)[0]]
+    for vg in body.vertex_groups:
+        vg.remove(idx) if vg.name != "arm.L" else None
+    body.vertex_groups["arm.L"].add(idx, 1.0, "REPLACE")
+    print(f"rig_static_model: {len(idx)} bow vertices bound to arm.L")
 
 # --- actions (same conventions as make_ranger_model.py) ---
 rig.animation_data_create()
@@ -160,11 +205,14 @@ action("Walk", {
     13: {"root": (0, 0, 0, 0.025 * H)},
     17: {"leg.L": (-26, 0, 0, 0), "leg.R": (26, 0, 0, 0), "arm.L": (14, 0, 0, 0), "arm.R": (-20, 0, 0, 0)}})
 if A["attack"] == "sword":
-    action("Attack", {1: {}, 4: {"arm.R": (-150, 0, 0, 0), "body": (0, 0, 12, 0)}, 8: {"arm.R": (60, 0, 0, 0), "body": (6, 0, -16, 0)}, 13: {}})
+    action("Attack", {1: {}, 4: {"arm.R": (-150, 0, 0, 0), "body": (0, 14, 0, 0)}, 8: {"arm.R": (60, 0, 0, 0), "body": (6, -16, 0, 0)}, 13: {}})
 else:
-    action("Attack", {1: {}, 4: {"arm.L": (-80, 0, 0, 0), "arm.R": (-70, 0, 20, 0), "body": (0, 0, 18, 0)},
-                      8: {"arm.L": (-85, 0, 0, 0), "arm.R": (-55, 0, 35, 0), "body": (0, 0, 22, 0)},
-                      10: {"arm.L": (-85, 0, 0, 0), "arm.R": (-30, 0, 10, 0), "body": (0, 0, 18, 0)}, 13: {}})
+    action("Attack", {   # upright archer: raise bow, draw the string back, release - no body lean
+        1: {},
+        4: {"arm.L": (-84, 0, 0, 0), "arm.R": (-80, 0, 0, 0), "body": (0, 8, 0, 0)},
+        8: {"arm.L": (-86, 0, 0, 0), "arm.R": (-52, 0, 0, 0), "body": (0, 12, 0, 0)},
+        10: {"arm.L": (-86, 0, 0, 0), "arm.R": (-28, 0, 0, 0), "body": (0, 12, 0, 0)},
+        13: {}})
 rig.animation_data.action = bpy.data.actions["Idle"]
 out = os.path.abspath(A["out"])
 bpy.ops.wm.save_as_mainfile(filepath=out)
