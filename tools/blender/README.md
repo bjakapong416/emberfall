@@ -54,3 +54,23 @@ sprites/packs.js            รายการ pack ที่เกมโหล�
 ## ข้อจำกัดตอนนี้
 - ชุดแฟชั่น หมวก ปีก และการย้อมสี ยังไม่แสดงบนตัวละครแบบ PNG (pack แทนทั้งตัว)
   ขั้นต่อไปคือเรนเดอร์แยกชั้น (ตัว / ผม / ชุด / หมวก) แล้วให้เกมซ้อนภาพเอง
+
+## ภาพวาด → โมเดล 3D ด้วย AI (Hunyuan3D-2, ฟรี รันในเครื่อง)
+ติดตั้งแล้วที่ `D:\AI\Hunyuan3D2_WinPortable` (ต้องมี CUDA Toolkit 12.9 + VS Build Tools สำหรับส่วนลงสี)
+
+1. เตรียมภาพตัวละครเต็มตัว 1 ตัว ด้านหน้า พื้นหลังโปร่งใส ไม่มีเงาที่พื้น (ดู `images/tripo/ranger_front_cutout.png`)
+2. สร้างโมเดล (ประมาณ 1–2 นาที)
+   ```bash
+   D:\AI\Hunyuan3D2_WinPortable\python_standalone\python.exe -s tools\hunyuan_generate.py --image images\tripo\ranger_front_cutout.png --out models\ranger.glb
+   ```
+3. ใส่โครงกระดูก + ท่า Idle / Walk / Attack อัตโนมัติ (`--attack sword` สำหรับอาชีพถือดาบ)
+   ```bash
+   blender -b --factory-startup -P tools/blender/rig_static_model.py -- --in models/ranger.glb --out tools/blender/ranger_ai.blend
+   ```
+4. เรนเดอร์เข้าเกม
+   ```bash
+   blender -b tools/blender/ranger_ai.blend -P tools/blender/render_sprites.py -- --name ranger --fill 0.86
+   ```
+ดูผลเร็ว ๆ ก่อนเรนเดอร์จริง: เพิ่ม `--preview` ในขั้นที่ 4
+
+สัญญาอนุญาต Hunyuan3D-2: ใช้เชิงพาณิชย์ได้ถ้าผู้ใช้ต่อเดือนไม่เกิน 1 ล้าน และห้ามใช้ผลงานในสหภาพยุโรป สหราชอาณาจักร และเกาหลีใต้

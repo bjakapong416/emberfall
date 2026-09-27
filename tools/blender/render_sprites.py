@@ -15,6 +15,7 @@ Options (after the "--"):
   --size WxH         frame size in pixels (default 320x400 = 4x the game's 80x100 frame)
   --elev DEG         camera elevation in degrees (default 30)
   --fill F           how much of the frame height the character fills, 0..1 (default 0.72)
+  --preview          only render a strip of 5 directions (idle) to sprites/<name>/preview.png
   --mirror           render 5 directions and mirror the other 3 (faster, for symmetric characters)
   --no-toon          keep the original materials (skip cel shading)
   --outline W        outline width as a fraction of character height (default 0.012, 0 = off)
@@ -36,12 +37,14 @@ FOOT_FROM_TOP = 0.92  # game draws the frame with the feet 8 of 100 units above 
 def parse_args():
     argv = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
     a = {"name": None, "out": None, "idle": None, "walk": None, "attack": None, "size": "320x400",
-         "elev": 30.0, "fill": 0.72, "mirror": False, "toon": True, "outline": 0.012}
+         "elev": 30.0, "fill": 0.72, "mirror": False, "preview": False, "toon": True, "outline": 0.012}
     i = 0
     while i < len(argv):
         k = argv[i].lstrip("-").replace("-", "_")
         if k == "mirror":
             a["mirror"] = True
+        elif k == "preview":
+            a["preview"] = True
         elif k == "no_toon":
             a["toon"] = False
         else:
@@ -269,6 +272,20 @@ def main():
     pivot = setup_scene(a, height)
 
     pack_dir = os.path.join(a["out"], a["name"])
+    if a["preview"]:  # one big idle frame per direction in a strip: quick look while modelling
+        os.makedirs(pack_dir, exist_ok=True)
+        assign_action(rig, actions["idle"])
+        order = [0, 7, 6, 5, 4]
+        strip = np.zeros((a["h"], len(order) * a["w"], 4), dtype=np.float32)
+        for i, d in enumerate(order):
+            dx, dy = DV[d]
+            pivot.rotation_euler = (0, 0, math.atan2(-dx, dy))
+            sc.render.filepath = os.path.join(tempfile.gettempdir(), f"ef_prev_{d}.png")
+            bpy.ops.render.render(write_still=True)
+            strip[:, i * a["w"]:(i + 1) * a["w"]] = read_png(sc.render.filepath)
+        write_png(os.path.join(pack_dir, "preview.png"), strip)
+        print("render_sprites: wrote preview", os.path.join(pack_dir, "preview.png"))
+        return
     os.makedirs(pack_dir, exist_ok=True)
     tmp = tempfile.mkdtemp(prefix="ef_sprites_")
     dirs = [0, 4, 5, 6, 7] if a["mirror"] else list(range(8))

@@ -1,3 +1,5 @@
 .DS_Store
 node_modules/
 *.blend1
+# rigged working files - regenerate with tools/blender/rig_static_model.py
+tools/blender/*_ai.blend
