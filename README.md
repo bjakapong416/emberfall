@@ -40,6 +40,10 @@ npx serve .              # หรือ python3 -m http.server 5174
 | `update()` / `draw()` | game loop |
 | `eqRender()` | หน้าอุปกรณ์ |
 
+## ตัวละครจาก Blender
+เรนเดอร์โมเดล 3D เป็น sprite sheet แบบ toon ได้ด้วย `tools/blender/render_sprites.py`
+ดูวิธีใช้ที่ [tools/blender/README.md](tools/blender/README.md)
+
 ## ต่อยอด
 - ใส่ multiplayer จริง: แทน `fakes[]` ด้วย state จาก WebSocket (Colyseus / Nakama / Socket.IO)
 - เปลี่ยน painter เป็น sprite sheet PNG: แก้ `getSheet()` ให้โหลดภาพตามผัง `[anim][dir][frame]`

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <title>Emberfall — 2D Web MMORPG Prototype</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Kanit:wght@300;400;600&family=Mitr:wght@400;500;600&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#0b1014; --stone:#1c252d; --stone2:#2a3641; --moss:#3f7a4e; --ember:#e0a63c; --ember2:#8a5a16;
@@ -248,12 +248,203 @@ body{font-family:Kanit,"Noto Sans Thai",system-ui,sans-serif}
 #eqdetail{background:#0e1420;border:2px solid #3a4c6a;border-radius:10px;padding:10px 14px;min-height:120px;font-size:13px}
 #eqdetail .dn{font-size:16px;font-weight:700;color:#c9a0ff}#eqdetail .dt{color:#8fc0ff;font-size:12px;margin-bottom:6px}#eqdetail ul{padding-left:18px;margin:4px 0}#eqdetail .dd{font-style:italic;color:#c9b48f;margin:6px 0}#eqdetail .de{color:#7cd67c;font-weight:600}
 @media (max-width:760px){#eqbody{grid-template-columns:1fr}#eqpreview{height:180px}#eqitems{max-height:200px}}
+/* ===== UI v4 — anime / JRPG skin ===== */
+:root{--ink:#0c1328;--pt:#2e4270;--pb:#172243;--trim:#f1cd6b;--trim2:#b07b24;--hl:rgba(255,255,255,.16);
+  --afont:Mitr,Kanit,"Noto Sans Thai",system-ui,sans-serif;--nfont:Fredoka,Mitr,sans-serif}
+body,.panel,.btn,#nameIn{font-family:var(--afont)}
+.h{font-family:var(--afont);letter-spacing:.02em}
+/* shared anime frame: ink outline, gold trim, glossy top */
+.card,#hud,.panel,#chat{background:linear-gradient(180deg,var(--pt),var(--pb) 70%);border:2px solid var(--trim);
+  box-shadow:0 0 0 3px var(--ink),inset 0 0 0 2px rgba(12,19,40,.8),inset 0 2px 0 3px var(--hl),0 8px 22px rgba(0,0,0,.55);border-radius:16px}
+#char{position:relative}
+.card::before,#hud::before,.panel::before{content:"";position:absolute;left:10px;right:10px;top:4px;height:38%;border-radius:12px 12px 40% 40%/12px 12px 18px 18px;background:linear-gradient(rgba(255,255,255,.14),rgba(255,255,255,0));pointer-events:none}
+/* character card */
+#top{top:12px;left:12px}
+#char{padding:8px 18px 10px 10px;gap:14px}
+#portrait{width:72px;height:72px;font-size:38px;background:radial-gradient(circle at 50% 30%,#bfe6ff,#5b8fd6 70%);border:3px solid var(--trim);box-shadow:0 0 0 3px var(--ink),0 0 0 5px var(--trim2),inset 0 -6px 12px rgba(0,0,0,.25)}
+#lvbadge{font-family:var(--nfont);bottom:-12px;left:-6px;transform:none;background:linear-gradient(#ffe7a0,#e9ad3c);color:#3a2412;border:2px solid var(--ink);border-radius:10px;padding:1px 9px;font-size:12px;font-weight:700;box-shadow:0 2px 0 var(--ink)}
+#char .col{min-width:260px;gap:5px}
+#char .name{font-size:18px;font-weight:600;color:#fff;text-shadow:0 2px 0 var(--ink),0 0 2px var(--ink);display:flex;align-items:baseline}
+#char .name small{color:#ffd98a;font-size:12px;font-weight:400;text-shadow:0 1px 0 var(--ink)}
+.sbar{height:15px;border-radius:8px;background:#0a1022;border:2px solid var(--ink);box-shadow:inset 0 2px 3px rgba(0,0,0,.6)}
+.sbar i{border-radius:6px}
+.sbar i::after{content:"";position:absolute;left:3px;right:3px;top:1px;height:40%;border-radius:6px;background:rgba(255,255,255,.4)}
+.sbar.hp i{background:linear-gradient(#ff8a8a,#e5404a 55%,#b52233)}
+.sbar.mp i{background:linear-gradient(#9cd0ff,#3d8ff0 55%,#2361c0)}
+.sbar span{font-family:var(--nfont);font-size:9px;font-weight:700;background:var(--ink);color:#fff;padding:0 6px;border-radius:6px;left:2px;top:0;line-height:11px}
+.sbar.mp span{color:#9cd0ff}.sbar.hp span{color:#ff9a9a}
+.sbar b{font-family:var(--nfont);font-size:11px;line-height:11px;font-weight:600;text-shadow:0 1px 0 var(--ink),0 0 3px var(--ink)}
+#zeny span{font-family:var(--nfont);background:linear-gradient(#ffe7a0,#e9ad3c);border:2px solid var(--ink);border-radius:8px;box-shadow:0 1px 0 var(--ink)}
+#buffs{display:flex;gap:5px;margin:8px 0 0 4px;min-height:30px}
+#buffs .bf{width:30px;height:30px;border-radius:8px;border:2px solid var(--ink);box-shadow:inset 0 0 0 1px var(--trim),0 2px 0 var(--ink);display:grid;place-items:center;font-size:16px;position:relative;background:linear-gradient(#5b7fd0,#28407e)}
+#buffs .bf b{position:absolute;bottom:-5px;right:-4px;font-family:var(--nfont);font-size:10px;color:#fff;text-shadow:0 1px 0 var(--ink),0 0 2px var(--ink)}
+/* target bar */
+#target{padding:8px 14px 9px;width:min(360px,80vw);top:14px}
+#target .tname{font-size:14px;font-weight:500;text-shadow:0 1px 0 var(--ink)}
+#target #tico{width:24px;height:24px;display:grid;place-items:center;background:#1d8a4a;border:2px solid var(--ink);border-radius:50%;font-size:13px}
+#target .tname small{font-family:var(--nfont);color:var(--trim)}
+#target .tname #tel{color:#fff;background:var(--ink);padding:0 8px;border-radius:6px;font-size:10px}
+#bossbar .bn{font-family:var(--afont);font-size:17px;color:var(--trim);text-shadow:0 2px 0 var(--ink),0 0 4px var(--ink),0 0 14px rgba(241,205,107,.6)}
+/* minimap wreath, clock, banner */
+#mini{border:6px solid #2f8f3a;box-shadow:0 0 0 3px var(--ink),0 0 0 7px var(--trim),0 0 0 10px var(--ink),inset 0 0 20px #000}
+#dial{border:3px solid var(--trim);box-shadow:0 0 0 3px var(--ink),inset 0 -4px 8px rgba(0,0,0,.4);background:radial-gradient(circle at 40% 30%,#7ec8ff,#2a5ab0 70%)}
+#clock{font-family:var(--nfont);font-weight:700;background:linear-gradient(#ffe7a0,#e9ad3c);border:2px solid var(--ink);border-radius:12px;box-shadow:0 2px 0 var(--ink)}
+#banner{font-family:var(--afont);font-weight:500;background:linear-gradient(#5fc0ff,#2a78d8 60%,#1f5cb0);border:2px solid var(--trim);box-shadow:0 0 0 3px var(--ink),0 4px 0 var(--ink);text-shadow:0 2px 0 var(--ink)}
+/* chat window with tabs + input */
+#chat{background:linear-gradient(180deg,rgba(46,66,112,.9),rgba(23,34,67,.9));padding:0 0 6px;max-height:none;height:190px;width:min(380px,52vw);bottom:calc(14px + env(safe-area-inset-bottom,0px));left:14px;justify-content:flex-start;overflow:hidden}
+#chattabs{display:flex;gap:2px;padding:6px 8px 4px;border-bottom:2px solid rgba(241,205,107,.4)}
+#chattabs span{font-size:11px;padding:2px 10px;border-radius:8px 8px 0 0;color:#b8c6e8;cursor:pointer}
+#chattabs span.on{background:linear-gradient(#ffe7a0,#e9ad3c);color:#3a2412;font-weight:600}
+#chatlog{flex:1;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;padding:2px 10px;font-size:12px}
+#chatlog p{text-shadow:0 1px 0 var(--ink),0 0 3px var(--ink);line-height:1.5}
+#chatlog p.hide{display:none}
+#chatlog .tag{color:#7cd67c;margin-right:3px}
+#chatin{margin:4px 8px 0;display:flex;gap:6px;align-items:center}
+#chatin b{font-size:10px;font-weight:500;background:var(--ink);color:var(--trim);border-radius:6px;padding:3px 8px;white-space:nowrap}
+#chatin input{flex:1;min-width:0;background:rgba(12,19,40,.8);border:1px solid rgba(241,205,107,.4);border-radius:8px;color:#fff;font-family:var(--afont);font-size:12px;padding:4px 8px;outline:none}
+#chatin input:focus{border-color:var(--trim)}
+/* hotbar */
+#hud{padding:14px 14px 7px;gap:6px}
+.sk{border:2px solid var(--ink);box-shadow:0 0 0 1px var(--trim2),inset 0 0 0 2px rgba(255,255,255,.18),0 3px 0 var(--ink);border-radius:11px}
+.sk::before{content:"";position:absolute;left:4px;right:4px;top:3px;height:36%;border-radius:8px;background:linear-gradient(rgba(255,255,255,.28),rgba(255,255,255,0));pointer-events:none;z-index:1}
+.sk .key{font-family:var(--nfont);background:linear-gradient(#ffe7a0,#e9ad3c);color:#3a2412;border:2px solid var(--ink);border-radius:6px;z-index:2}
+.sk .lv{font-family:var(--nfont);z-index:2;text-shadow:0 1px 0 var(--ink),0 0 2px var(--ink)}
+.sk .mp{font-family:var(--nfont);background:var(--ink);border:1px solid var(--trim2);color:#9cd0ff;z-index:2}
+.sk .cdn{font-family:var(--nfont);font-size:26px;font-weight:700;z-index:2;text-shadow:0 2px 0 var(--ink),0 0 3px var(--ink),0 0 10px #000}
+.sk.item .n{font-family:var(--nfont);z-index:2}
+.sk:hover{filter:brightness(1.12)}
+.xpb{height:9px;border:1px solid var(--ink);box-shadow:0 0 0 1px var(--trim2)}
+.xpb span,.xpb b{font-family:var(--nfont);font-size:8px;top:-1px}
+/* dock + auto + gold */
+#dock{align-items:flex-end;bottom:calc(20px + env(safe-area-inset-bottom,0px))}
+@media (max-width:1500px){#dock{bottom:calc(128px + env(safe-area-inset-bottom,0px))}#goldpill{bottom:calc(206px + env(safe-area-inset-bottom,0px))!important}}
+#dock .ib{width:44px;height:44px;border-radius:12px;background:linear-gradient(#3b5590,#1c2a52);border:2px solid var(--ink);box-shadow:0 0 0 1px var(--trim2),inset 0 2px 0 rgba(255,255,255,.2),0 3px 0 var(--ink);font-size:22px;filter:none}
+#dock .ib span{font-family:var(--nfont);background:linear-gradient(#ffe7a0,#e9ad3c);color:#3a2412;border:2px solid var(--ink);bottom:-10px}
+#dock .ib.on{box-shadow:0 0 0 2px var(--trim),0 0 14px rgba(241,205,107,.7),0 3px 0 var(--ink);filter:none}
+#dock #mode{width:60px;height:60px;border-radius:50%;background:radial-gradient(circle at 50% 35%,#4a6ab0,#18244a);border:3px solid var(--trim);box-shadow:0 0 0 3px var(--ink),0 3px 0 var(--ink);font-size:24px;margin-left:4px}
+#dock #mode.on{box-shadow:0 0 0 3px var(--ink),0 0 18px rgba(241,205,107,.9);animation:spinGlow 2.4s linear infinite}
+@keyframes spinGlow{50%{filter:brightness(1.25)}}
+#goldpill{position:fixed;right:14px;bottom:calc(80px + env(safe-area-inset-bottom,0px));z-index:6;display:flex;align-items:center;gap:6px;font-family:var(--nfont);font-weight:700;font-size:15px;color:#fff;background:linear-gradient(#2e4270,#172243);border:2px solid var(--trim);box-shadow:0 0 0 3px var(--ink);border-radius:14px;padding:2px 14px 2px 4px;text-shadow:0 1px 0 var(--ink)}
+#goldpill i{font-style:normal;width:22px;height:22px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#fff2b0,#e9ad3c 60%,#a06a18);border:2px solid var(--ink);display:grid;place-items:center;font-size:11px;color:#6a4210}
+/* panels / buttons / toast */
+.panel{border-radius:18px}
+.panel header{font-family:var(--afont);font-weight:600;color:var(--trim);text-shadow:0 2px 0 var(--ink);border-bottom:2px solid rgba(241,205,107,.45);position:relative;z-index:1}
+.panel header button{background:linear-gradient(#ff8a8a,#c8323c);border:2px solid var(--ink);color:#fff;border-radius:50%;box-shadow:0 2px 0 var(--ink)}
+.panel .body{position:relative;z-index:1}
+.btn{background:linear-gradient(#ffe7a0,#e9ad3c 60%,#c98a22);border:2px solid var(--ink);box-shadow:0 3px 0 var(--ink),inset 0 2px 0 rgba(255,255,255,.5);border-radius:12px;font-weight:600}
+.btn:active{transform:translateY(2px);box-shadow:0 1px 0 var(--ink)}
+.slot,.itm{border:2px solid var(--ink);box-shadow:inset 0 2px 0 rgba(255,255,255,.18),0 2px 0 var(--ink)}
+#toast{font-family:var(--afont);font-weight:600;font-size:26px;color:#fff;-webkit-text-stroke:5px var(--ink);paint-order:stroke fill;text-shadow:0 4px 0 var(--ink),0 0 18px rgba(241,205,107,.8)}
+#cast{font-family:var(--afont);text-shadow:0 1px 0 var(--ink)}
+/* start screen */
+#start{background:radial-gradient(ellipse at 50% 20%,#6fb8ff 0,#3a6fc8 35%,#1a2a5a 75%)}
+#start h1{font-family:var(--nfont);font-weight:700;color:#fff;-webkit-text-stroke:8px var(--ink);paint-order:stroke fill;text-shadow:0 6px 0 var(--ink),0 0 30px rgba(241,205,107,.7);background:none}
+#start p{color:#e3ecff;text-shadow:0 1px 0 var(--ink)}
+.cls{background:linear-gradient(var(--pt),var(--pb));border:2px solid var(--trim2);box-shadow:0 0 0 3px var(--ink),0 4px 0 var(--ink)}
+.cls:hover,.cls.sel{border-color:var(--trim);box-shadow:0 0 0 3px var(--ink),0 0 18px rgba(241,205,107,.6)}
+#nameIn{border:2px solid var(--trim2);box-shadow:0 0 0 3px var(--ink);border-radius:12px;background:#0c1328}
+@media (max-height:560px),(max-width:900px){
+  #hud{transform:translateX(-50%) scale(.72)!important;transform-origin:bottom center}
+  #chat{height:104px;width:min(210px,calc(50vw - 230px))}#chatin{display:none}#chattabs span{padding:2px 5px;font-size:10px}
+  #dock{transform:scale(.72);transform-origin:bottom right;bottom:calc(92px + env(safe-area-inset-bottom,0px))!important}
+  #goldpill{right:auto!important;left:14px;bottom:calc(128px + env(safe-area-inset-bottom,0px))!important}
+  #top{transform:scale(.85);transform-origin:top left}#buffs{margin-top:4px}
+}
+@media (pointer:coarse){#chat{height:120px;width:min(300px,60vw)}#chatin{display:none}#goldpill{bottom:calc(180px + env(safe-area-inset-bottom,0px))}}
+
+/* ===== UI v5 - warm storybook (wood / parchment / brass) ===== */
+:root{--ink:#2a160a;--pt:#5a3822;--pb:#34200f;--trim:#e7b84c;--trim2:#a8701f;--hl:rgba(255,240,200,.12);
+  --par:#fbf1dc;--par2:#f1dfb8;--wood:#7a4724;--wood2:#3f2210;--brass:#e7b84c;--txt:#4a2e18;--txt2:#8a6a45;--edge:#e3cd9f}
+.card,#hud,#chat{background:linear-gradient(180deg,rgba(90,56,34,.9),rgba(52,32,15,.9));border:1.5px solid rgba(231,184,76,.75);
+  box-shadow:0 0 0 2px rgba(42,22,10,.85),inset 0 1px 0 rgba(255,230,180,.18),0 6px 18px rgba(0,0,0,.45)}
+#portrait{background:radial-gradient(circle at 50% 35%,#fff6e0,#f0d6a0 70%);border-color:#f6e2b0;box-shadow:0 0 0 3px var(--ink),0 0 0 5px var(--trim2)}
+#char .name small{color:#f6d38a}
+#chattabs{border-bottom-color:rgba(231,184,76,.35)}#chattabs span{color:#e6d2ac}
+#chatin input{background:rgba(30,16,8,.7);border-color:rgba(231,184,76,.35)}
+#dock .ib{background:linear-gradient(#fff4dc,#e9d3a6);box-shadow:0 0 0 1.5px var(--trim2),inset 0 2px 0 #fff,0 3px 0 var(--ink)}
+#dock #mode{background:radial-gradient(circle at 50% 35%,#fff6e0,#d9bf8e);color:var(--txt)}
+#goldpill{background:linear-gradient(rgba(90,56,34,.95),rgba(52,32,15,.95))}
+#banner{background:linear-gradient(#8a5530,#5a3218);border-color:var(--trim);color:#fff3d6}
+#mini{border-color:#6a9a3a}
+.sk{box-shadow:0 0 0 1.5px var(--trim),inset 0 0 0 2px rgba(255,255,255,.2),0 3px 0 var(--ink)}
+.sk.empty{background:rgba(40,24,12,.7);box-shadow:inset 0 0 0 2px rgba(231,184,76,.25)}
+.sk.item{background:linear-gradient(#fff4dc,#e2c998)}
+.xpb{background:rgba(30,16,8,.8)}
+/* panels: wooden frame + brass studs + parchment */
+.panel{--muted:var(--txt2);background:linear-gradient(#fdf5e3,var(--par) 40%,#f5e6c6);color:var(--txt);border:7px solid var(--wood);border-radius:20px;overflow:visible;
+  box-shadow:0 0 0 2px var(--wood2),0 0 0 5px #c98f3a,0 0 0 8px var(--wood2),inset 0 0 0 2px #f0d9a8,inset 0 0 40px rgba(170,120,60,.22),0 26px 60px rgba(0,0,0,.6)}
+.panel::before{content:"";position:absolute;inset:-24px;height:auto;border-radius:0;pointer-events:none;z-index:4;
+  background-image:radial-gradient(circle,#fff3b0 0 3px,#e7b84c 4px 10px,#8a5a1a 11px 13px,#3f2210 14px 15px,transparent 16px),radial-gradient(circle,#fff3b0 0 3px,#e7b84c 4px 10px,#8a5a1a 11px 13px,#3f2210 14px 15px,transparent 16px),radial-gradient(circle,#fff3b0 0 3px,#e7b84c 4px 10px,#8a5a1a 11px 13px,#3f2210 14px 15px,transparent 16px),radial-gradient(circle,#fff3b0 0 3px,#e7b84c 4px 10px,#8a5a1a 11px 13px,#3f2210 14px 15px,transparent 16px);background-repeat:no-repeat;background-size:32px 32px;background-position:0 0,100% 0,0 100%,100% 100%}
+.panel header{background:linear-gradient(#8a5530,#5a3218);color:#fff3d6;text-shadow:0 2px 0 var(--wood2);border-bottom:3px solid var(--wood2);border-radius:12px 12px 0 0;padding:12px 18px;font-size:19px;box-shadow:inset 0 1px 0 rgba(255,220,160,.3)}
+.panel header button{width:36px;height:36px;font-size:17px;background:radial-gradient(circle at 50% 35%,#6a3a1c,#3f2210);border:3px solid var(--brass);box-shadow:0 0 0 2px var(--wood2),0 3px 0 var(--wood2);color:#fff}
+.panel .body{color:var(--txt);font-size:14px;border-radius:0 0 12px 12px}
+.panel .body b{color:var(--txt)}
+#collect{color:#f6d38a!important}
+.row{border-bottom:1.5px dashed var(--edge)}
+.btn{background:linear-gradient(#ffe38a,#f2b93e 60%,#d9962a);color:var(--txt);border:2px solid #a8701f;box-shadow:0 3px 0 #8a5a1a,inset 0 2px 0 rgba(255,255,255,.6);font-size:15px;padding:10px 18px}
+.btn.ghost{background:linear-gradient(#f4efe6,#dcd4c4);color:#a09684;border-color:#bdb29e;box-shadow:0 3px 0 #a89d88,inset 0 2px 0 #fff}
+.tab{background:#fff8ea;color:#6b4a2a;border:1.5px solid var(--edge);border-radius:10px;padding:5px 14px;font-size:13px;box-shadow:0 2px 0 var(--edge)}
+.tab.on{background:linear-gradient(#ffe38a,#f0b640);color:var(--txt);border-color:#b07b24;box-shadow:0 2px 0 #a8701f;font-weight:500}
+.slot{background:linear-gradient(#fffaf0,#efe2c4);border:1.5px solid #d9bf8e;box-shadow:0 2px 0 var(--edge)}.slot .n{color:var(--txt)}
+.slot:hover{border-color:var(--brass)}
+/* equipment window as an open book */
+#p-stats{width:min(1000px,96vw);background:linear-gradient(90deg,#f7e9cb,#fdf5e3 8%,var(--par) 46%,#e3cb98 49.6%,#c9ad78 50%,#e3cb98 50.4%,var(--par) 54%,#fdf5e3 92%,#f7e9cb)}
+#p-stats .ribbon{position:absolute;top:-10px;left:calc(50% - 18px);width:36px;height:74px;z-index:5;background:linear-gradient(90deg,#b8262a,#e0443c 50%,#b8262a);clip-path:polygon(0 0,100% 0,100% 100%,50% 80%,0 100%);display:grid;place-items:start center;padding-top:36px;font-size:14px}
+#eqbody{grid-template-columns:1fr 1fr;gap:56px;padding:18px 26px 22px}
+#eqL,#eqR{min-width:0}
+.eqlbl{color:var(--txt2);font-size:12px}
+.jchip{background:#fff8ea;border:1.5px solid var(--edge)}.jchip.on{border-color:var(--brass);box-shadow:0 0 0 2px rgba(231,184,76,.4)}
+.fchip{border:1.5px solid #c98f8f}
+#eqpreview{background:radial-gradient(circle at 50% 60%,#fffaf0,#f0dcb2 72%);border:1.5px solid var(--edge);border-radius:14px}
+.eqslot{background:#fffaf0;border:1.5px solid var(--edge);box-shadow:0 2px 0 var(--edge)}.eqslot small{color:var(--txt2)}.eqslot .v{color:var(--txt)}.eqslot.empty .v{color:#b8a080}
+#statsbody .row span{color:var(--txt2)}
+#eqitems{grid-template-columns:1fr;gap:9px;max-height:360px;padding:4px 6px 4px 2px}
+.itm.row-itm{aspect-ratio:auto;display:grid;grid-template-columns:58px 1fr auto;align-items:center;gap:14px;padding:8px 14px 8px 8px;background:#fffaf0;border:1.5px solid var(--edge);border-radius:12px;box-shadow:0 2px 0 var(--edge);font-size:inherit;text-align:left}
+.itm.row-itm:hover{background:#fff5dd}
+.itm.row-itm.sel{border:2px solid var(--brass);background:#fff6da;box-shadow:0 0 0 3px rgba(231,184,76,.3),0 2px 0 #d9b25a}
+.row-itm .ii{width:54px;height:54px;border-radius:10px;background:linear-gradient(#f5eee0,#dcd0b6);border:1.5px solid #cdb993;display:grid;place-items:center;font-size:30px;position:relative}
+.row-itm .ii svg{width:74%;height:74%}
+.row-itm .it{display:flex;flex-direction:column;gap:2px;min-width:0}
+.row-itm .it b{font-size:15px;font-weight:500;color:var(--txt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row-itm .it em{font-style:normal;font-weight:500}
+.row-itm .it small{font-size:12.5px;color:#6b4a2a}
+.r-n{color:#8a7a65}.r-rare{color:#2f6fd0}.r-epic{color:#d0342c}.r-fash{color:#c0508a}
+.row-itm .is span{display:grid;place-items:center;min-width:52px;height:34px;border-radius:9px;background:#f6ead0;border:1.5px solid var(--edge);font-size:12px;font-weight:600;padding:0 8px;position:static;color:var(--txt2)}
+.row-itm .is .chk{color:#3f8a3a;background:#e9f5dc;border-color:#b9d9a0}
+.row-itm .is .new{color:#fff;background:#e0443c;border-color:#a82a24}
+.row-itm .ii .cnt{color:var(--txt);text-shadow:0 1px 0 #fff}
+/* detail page */
+#eqdetail{background:none;border:0;padding:0;font-size:14px;color:var(--txt)}
+#eqdetail .dn{font-size:25px;font-weight:600;color:#3b2414;margin:2px 0 6px}
+.dhero{display:grid;grid-template-columns:1fr auto;align-items:center;gap:10px;margin-bottom:10px}
+.dimg{height:150px;display:grid;place-items:center;font-size:84px;background:radial-gradient(circle,#fff 0,#fdf0d2 45%,transparent 70%)}
+.dimg svg{width:120px;height:120px;filter:drop-shadow(0 6px 6px rgba(90,60,20,.35))}
+.dside{display:flex;flex-direction:column;align-items:flex-end;gap:14px;padding-right:6px}
+.dpill{background:#ece4d4;border:1.5px solid #d8ccb4;border-radius:14px;padding:3px 16px;font-size:14px;font-weight:500}
+.dmain{font-size:20px;font-weight:600;color:#3b2414}
+.dbox{background:#fff8ea;border:1.5px solid var(--edge);border-radius:12px;overflow:hidden}
+.dbh{padding:8px 14px;font-weight:600;font-size:15px;border-bottom:1.5px solid var(--edge);background:#fbefd4}
+.dbr{display:flex;justify-content:space-between;padding:7px 14px;border-bottom:1px dashed var(--edge)}.dbr:last-child{border-bottom:0}.dbr b{color:#3f8a3a!important}
+.dbtns{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0 12px}
+#eqdetail .dd{font-style:normal;color:#5a3e24;background:#fffaf0;border:1.5px solid var(--edge);border-radius:12px;padding:10px 14px;margin:0;font-size:13px}
+@media (max-width:760px){#eqbody{grid-template-columns:1fr;gap:16px}#p-stats{background:var(--par)}#p-stats .ribbon{display:none}}
+#eqpreview{height:190px}#eqcv{width:190px;height:190px}
+.dhero{grid-template-columns:120px 1fr;gap:14px;margin-bottom:8px}.dimg{height:110px;font-size:64px}.dimg svg{width:88px;height:88px}
+.dside{align-items:flex-start;gap:6px}#eqdetail .dn{margin:0;font-size:22px}.dmain{font-size:17px}
+.dbr{padding:5px 14px}.dbtns{margin:10px 0 8px}.dbtns .btn{padding:8px 14px}
+#eqitems{max-height:calc(92vh - 480px);min-height:150px}
+#portrait{background-size:cover;background-position:center 20%}
+img.art{width:78%;height:78%;object-fit:contain;display:block;filter:drop-shadow(0 2px 2px rgba(60,35,15,.35));pointer-events:none}
+.dimg img.art{width:130px;height:130px}.slot img.art{width:80%;height:80%}.eqslot .ic img.art{width:30px;height:30px;margin:0 auto}
+#eqgrid{grid-template-columns:repeat(3,1fr)}
 </style>
 </head>
 <body>
 <canvas id="game"></canvas>
+<script>window.__spriteQueue=[];function registerSpritePack(n,m){__spriteQueue.push([n,m])}</script>
+<script src="sprites/packs.js" onerror="void 0"></script>
 
-<div id="start">
+<div id="start" style="display:none">
   <h1 class="h">EMBERFALL</h1>
   <p>ดันเจี้ยนใต้เมืองร้าง — เลือกอาชีพ ตั้งชื่อ แล้วลงไปตีมอนสเตอร์</p>
   <div id="classes"></div>
@@ -273,6 +464,7 @@ body{font-family:Kanit,"Noto Sans Thai",system-ui,sans-serif}
       <div id="zeny"><span>แต้มสเตตัส <b id="stpts">0</b></span><span>🪙 <b id="z">0</b></span><span>Job <b id="jlv">1</b></span><span>💀 <b id="kills">0</b></span></div>
     </div>
   </div>
+  <div id="buffs"></div>
 </div>
 <div class="ui" id="mini"><canvas id="minimap" width="150" height="150"></canvas></div>
 <svg id="leaf" viewBox="0 0 200 200"><g fill="#3f8a48" stroke="#0e1420" stroke-width="2.5"><ellipse cx="100" cy="6" rx="16" ry="8"/><ellipse cx="100" cy="194" rx="16" ry="8"/><ellipse cx="6" cy="100" rx="8" ry="16"/><ellipse cx="194" cy="100" rx="8" ry="16"/><ellipse cx="34" cy="34" rx="14" ry="7" transform="rotate(-45 34 34)"/><ellipse cx="166" cy="34" rx="14" ry="7" transform="rotate(45 166 34)"/><ellipse cx="34" cy="166" rx="14" ry="7" transform="rotate(45 34 166)"/><ellipse cx="166" cy="166" rx="14" ry="7" transform="rotate(-45 166 166)"/></g><g fill="#8fd67a" stroke="#0e1420" stroke-width="2"><ellipse cx="60" cy="14" rx="9" ry="5" transform="rotate(-20 60 14)"/><ellipse cx="140" cy="14" rx="9" ry="5" transform="rotate(20 140 14)"/><ellipse cx="14" cy="60" rx="5" ry="9" transform="rotate(20 14 60)"/><ellipse cx="186" cy="60" rx="5" ry="9" transform="rotate(-20 186 60)"/></g><polygon points="100,-2 108,18 128,26 108,34 100,54 92,34 72,26 92,18" fill="#f2c94c" stroke="#0e1420" stroke-width="2.5"/></svg>
@@ -294,14 +486,15 @@ body{font-family:Kanit,"Noto Sans Thai",system-ui,sans-serif}
 <div id="target" class="card"><div class="tname"><span id="tico"></span> <b id="tn"></b> <small id="tlv"></small><span id="tel">อาวุธไม่มีธาตุ 100%</span></div><div class="sbar hp"><i id="thf"></i><b id="tht"></b></div></div>
 <div id="bossbar"><div class="bn h">★ <span id="bn"></span></div><div class="sbar hp"><i id="bhf"></i><b id="bht"></b></div></div>
 <div class="ui" id="quest" data-p="quest"><div class="t h">Main Quest</div><div id="qtext">—</div></div>
-<div class="ui" id="chat"></div>
+<div class="ui" id="chat"><div id="chattabs"><span class="on" data-f="all">ทั้งหมด</span><span data-f="gen">ทั่วไป</span><span data-f="map">แมพ</span><span data-f="sys">ระบบ</span></div><div id="chatlog"></div><div id="chatin"><b>ทั่วไป</b><input id="chatbox" maxlength="60" placeholder="กด Enter เพื่อพิมพ์"></div></div>
+<div id="goldpill"><i>G</i><b id="gold2">0</b></div>
 <div class="ui" id="joy"><i></i></div>
 <div class="ui card" id="hud"><div id="skills"></div><div id="xpbars"><div class="xpb"><i id="xpb1"></i><span>Base</span><b id="xpt1">0%</b></div><div class="xpb job"><i id="xpb2"></i><span>Job</span><b id="xpt2">0%</b></div></div></div>
 <div id="toast" class="h"></div>
 
 <div class="panel" id="p-inv"><header class="h">กระเป๋า <button data-x>✕</button></header><div class="body"><div class="grid" id="invgrid"></div><p id="invhint" style="color:var(--muted);margin-top:8px">แตะไอเทมเพื่อใช้/สวม</p></div></div>
 <div class="panel" id="p-quest"><header class="h">Quests <button data-x>✕</button></header><div class="body" id="questbody"></div></div>
-<div class="panel" id="p-stats"><header class="h">ตัวละคร &amp; อุปกรณ์ <span id="collect" style="margin-left:auto;font-size:12px;color:#c9b48f;font-family:Kanit">สะสมแล้ว 0 / 0</span> <button data-x>✕</button></header>
+<div class="panel" id="p-stats"><div class="ribbon">🐾</div><header class="h">ตัวละคร &amp; อุปกรณ์ <span id="collect" style="margin-left:auto;font-size:12px;color:#c9b48f;font-family:Kanit">สะสมแล้ว 0 / 0</span> <button data-x>✕</button></header>
 <div class="body" id="eqbody">
  <div id="eqL">
   <div class="eqrow"><span class="eqlbl">อาชีพ</span><div id="eqjobs"></div></div>
@@ -331,7 +524,7 @@ const CLASSES={
     {n:'Bash',ico:'💥',mp:8,cd:2,mul:2.2,key:'1'},{n:'Shield Wall',ico:'🛡️',mp:12,cd:10,buff:'def',key:'2'},{n:'Whirl',ico:'🌪️',mp:15,cd:6,mul:1.4,aoe:70,key:'3'}]},
   witch:{name:'Ember Witch',ico:'🔮',hp:110,mp:120,atk:20,def:2,range:150,spd:2.1,skills:[
     {n:'Fire Bolt',ico:'🔥',mp:10,cd:1.2,mul:2.5,key:'1'},{n:'Frost Nova',ico:'❄️',mp:22,cd:8,mul:1.6,aoe:110,key:'2'},{n:'Mana Well',ico:'💧',mp:0,cd:15,heal:'mp',key:'3'}]},
-  ranger:{name:'Culvert Ranger',ico:'🏹',hp:130,mp:70,atk:17,def:3,range:190,spd:2.5,skills:[
+  ranger:{name:'Culvert Ranger',ico:'🏹',portrait:'assets/portraits/ranger.png',hp:130,mp:70,atk:17,def:3,range:190,spd:2.5,skills:[
     {n:'Double Strafe',ico:'➶',mp:9,cd:1.5,mul:2.4,key:'1'},{n:'Arrow Rain',ico:'🌧️',mp:20,cd:7,mul:1.3,aoe:120,key:'2'},{n:'Quick Step',ico:'💨',mp:10,cd:12,buff:'spd',key:'3'}]},
 };
 const MOBS={
@@ -345,6 +538,7 @@ const MOBS={
   mushking:{name:'ราชาเห็ดเรืองแสง',lv:50,ico:'🍄',hp:4000,atk:48,exp:2500,z:[1500,3000],col:'#3aa8e8',spd:.7,r:30,boss:true,drops:[['Ember Core',1],['ชุดแพนด้า',.3],['ปีกค้างคาว',.2]]},
 };
 const ITEMS={
+  'แหวนเงิน':{ico:'💍',eq:'acc',def:3,luk:2,price:300,desc:'แหวนเงินสลักลาย ฝังอัญมณีสีฟ้า · LUK +2'},
   'Red Potion':{ico:'🧪',use:p=>{p.hp=Math.min(p.mhp,p.hp+80);toast('+80 HP')},price:20,desc:'ฟื้น HP 80'},
   'Blue Potion':{ico:'🔵',use:p=>{p.mp=Math.min(p.mmp,p.mp+40);toast('+40 MP')},price:35,desc:'ฟื้น MP 40'},
   'Red Herb':{ico:'🌿',use:p=>{p.hp=Math.min(p.mhp,p.hp+25)},price:5,desc:'ฟื้น HP 25'},
@@ -481,6 +675,7 @@ let questIdx=0,qProg=0,cam={x:0,y:0},keys={},dead=false,lastT=0,online=0,bossTim
 
 // ===================== CRISP SVG ICONS =====================
 const ICON={
+  'แหวนเงิน':'<img class="art" src="assets/icons/silver_ring.png" alt="">',
   attack:`<svg viewBox="0 0 64 64"><defs><linearGradient id="gA" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8fe08a"/><stop offset="1" stop-color="#2f7a3a"/></linearGradient></defs><rect width="64" height="64" rx="10" fill="url(#gA)"/><g stroke="#0e1420" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"><path d="M16 50 L44 14" stroke-width="9"/><path d="M16 50 L44 14" stroke="#e8eef4" stroke-width="5"/><path d="M14 40 L24 50" stroke-width="7"/><path d="M14 40 L24 50" stroke="#c9a36a" stroke-width="4"/><path d="M8 56 L14 50" stroke-width="6"/><path d="M8 56 L14 50" stroke="#5a3a20" stroke-width="3"/></g><g fill="#fff" opacity=".85"><path d="M46 40 l3 6 6 3 -6 3 -3 6 -3 -6 -6 -3 6 -3z"/><path d="M12 14 l2 4 4 2 -4 2 -2 4 -2 -4 -4 -2 4 -2z"/></g></svg>`,
   Bash:`<svg viewBox="0 0 64 64"><defs><radialGradient id="gB"><stop offset="0" stop-color="#ffe27a"/><stop offset="1" stop-color="#c0392b"/></radialGradient></defs><rect width="64" height="64" rx="10" fill="#7a2a1a"/><path d="M32 6 l6 14 14-8 -8 14 14 6 -14 6 8 14 -14-8 -6 14 -6-14 -14 8 8-14 -14-6 14-6 -8-14 14 8z" fill="url(#gB)" stroke="#0e1420" stroke-width="3" stroke-linejoin="round"/><circle cx="32" cy="32" r="8" fill="#fff" stroke="#0e1420" stroke-width="2.5"/></svg>`,
   'Shield Wall':`<svg viewBox="0 0 64 64"><rect width="64" height="64" rx="10" fill="#274a7a"/><path d="M32 8 L52 14 V32 C52 44 42 52 32 56 C22 52 12 44 12 32 V14 Z" fill="#8fc0ff" stroke="#0e1420" stroke-width="3.5" stroke-linejoin="round"/><path d="M32 12 L48 17 V32 C48 41 40 48 32 51Z" fill="#dbeeff"/><path d="M32 18 V46 M20 30 H44" stroke="#0e1420" stroke-width="3.5" stroke-linecap="round"/><path d="M32 18 V46 M20 30 H44" stroke="#f2c94c" stroke-width="2"/></svg>`,
@@ -504,7 +699,7 @@ $('#nameIn').addEventListener('keydown',e=>{if(e.key=='Enter')$('#go').click()})
 
 function start(cls){
   const c=CLASSES[cls];P.cls=cls;P.dir=0;P.mhp=c.hp;P.mmp=c.mp;P.hp=c.hp;P.mp=c.mp;P.atk=c.atk;P.def=c.def;P.range=c.range;P.spd=c.spd;
-  $('#start').style.display='none';$('#portrait').firstChild.textContent=c.ico;$('#pname').textContent=P.name;
+  $('#start').style.display='none';$('#portrait').firstChild.textContent=c.portrait?'':c.ico;$('#portrait').style.backgroundImage=c.portrait?`url(${c.portrait})`:'';$('#pname').textContent=P.name;
   const sk=$('#skills');sk.innerHTML='';
   const na=document.createElement('div');na.className='sk';na.innerHTML='<span class="key">Q</span>'+ICON.attack+'<small>โจมตี</small>';na.onclick=()=>normalAttack(true);sk.appendChild(na);
   const KEYS=['E','R','F'];c.skills.forEach((s,i)=>{const d=document.createElement('div');d.className='sk';d.innerHTML=`<span class="key">${KEYS[i]}</span>${ICON[s.n]||s.ico}<span class="lv">Lv${5+i*2}</span><span class="mp">SP ${s.mp}</span><div class="cd"></div><b class="cdn"></b>`;d.onclick=()=>useSkill(i);sk.appendChild(d);});
@@ -517,7 +712,7 @@ function start(cls){
   pet.x=P.x-30;pet.y=P.y;
   load();
   chat('sys',`ยินดีต้อนรับสู่ Emberfall, ${P.name}! แตะมอนสเตอร์เพื่อโจมตี`);
-  give('Red Potion',3);give('Blue Potion',2);give('Pet Food',2);give('หมวกกบ',1);give('ชุดกบ',1);give('ชุดลูกเจี๊ยบ',1);give('ปีกนางฟ้า',1);give('ผ้าคลุมดาว',1);
+  give('Red Potion',3);give('Blue Potion',2);give('Pet Food',2);give('หมวกกบ',1);give('ชุดกบ',1);give('ชุดลูกเจี๊ยบ',1);give('ปีกนางฟ้า',1);give('ผ้าคลุมดาว',1);if(!P.inv['แหวนเงิน']&&P.eq.acc!='แหวนเงิน')give('แหวนเงิน',1);
   requestAnimationFrame(loop);
 }
 $('#mode').onclick=()=>{P.auto=!P.auto;$('#mode').classList.toggle('on',P.auto);$('#mode').innerHTML=P.auto?'⚔️<span>Auto</span>':'🖐️<span>Manual</span>';toast(P.auto?'Auto battle on':'Manual mode')};
@@ -602,13 +797,13 @@ function give(it,n){P.inv[it]=(P.inv[it]||0)+n}
 function useItem(it){const d=ITEMS[it];if(d.eq){if(P.eq[d.eq]==it){delete P.eq[d.eq];toast('ถอด '+it)}else{P.eq[d.eq]=it;toast('สวม '+it);cast(`<em>${P.name}</em> equipped <b>${it}</b>`)}}
   else if(d.use){d.use(P);P.inv[it]--;if(P.inv[it]<=0)delete P.inv[it]}else if(it=='Pet Food'){pet.hunger=100;P.inv[it]--;if(P.inv[it]<=0)delete P.inv[it];toast(pet.name+' อิ่มแล้ว')}
   else toast(d.desc);renderInv();if($('#p-stats').classList.contains('open'))renderStats();save()}
-function renderInv(){const g=$('#invgrid');g.innerHTML='';let i=0;for(const it in P.inv){const d=document.createElement('div');d.className='slot';d.innerHTML=`${ITEMS[it].ico}<span class="n">${P.inv[it]>1?P.inv[it]:''}</span>`;if(Object.values(P.eq).includes(it))d.classList.add('eqd');d.title=it+' — '+ITEMS[it].desc;d.onclick=()=>useItem(it);g.appendChild(d);i++}for(;i<24;i++){const d=document.createElement('div');d.className='slot';g.appendChild(d)}}
+function renderInv(){const g=$('#invgrid');g.innerHTML='';let i=0;for(const it in P.inv){const d=document.createElement('div');d.className='slot';d.innerHTML=`${ICON[it]&&ICON[it].startsWith('<img')?ICON[it]:ITEMS[it].ico}<span class="n">${P.inv[it]>1?P.inv[it]:''}</span>`;if(Object.values(P.eq).includes(it))d.classList.add('eqd');d.title=it+' — '+ITEMS[it].desc;d.onclick=()=>useItem(it);g.appendChild(d);i++}for(;i<24;i++){const d=document.createElement('div');d.className='slot';g.appendChild(d)}}
 function renderQuest(){const q=QUESTS[questIdx];const b=$('#questbody');if(!q){b.innerHTML='ทำเควสหลักครบแล้ว 🎉 ภาคต่อจะมาใน Drowned Archive';return}
   const done=qProg>=q.need;b.innerHTML=`<b style="color:var(--ember)">${q.t}</b><p>${q.desc}</p><p>Defeat ${q.need} ${MOBS[q.mob].name} <b style="color:${done?'#7cd67c':'var(--ember)'}">(${qProg}/${q.need})</b></p><p>รางวัล: 🪙 ${q.rz} · ${q.rexp} EXP</p><button class="btn" ${done?'':'disabled'} id="claim">รับรางวัล</button>`;
   if(done)$('#claim').onclick=()=>{P.z+=q.rz;P.exp+=q.rexp;toast('รับรางวัลแล้ว!');questIdx++;qProg=0;if(QUESTS[questIdx]&&QUESTS[questIdx].mob=='king'&&curMap=='meadow'&&!mobs.some(m=>m.type=='king'))spawn('king');renderQuest();save()}}
 function renderStats(){const DYES=[null,'#5fbf5a','#ffd75e','#f5a3c0','#8fc0ff','#c0392b','#8a5ac0','#f3f3f3','#3a2a2a'];$('#dyes').innerHTML=DYES.map(d=>`<div data-d="${d||''}" style="width:26px;height:26px;border-radius:50%;cursor:pointer;background:${d||'linear-gradient(135deg,#fff 45%,#c0392b 50%,#fff 55%)'};border:2px solid ${(P.dye||'')==(d||'')?'var(--gold)':'#1a110d'}"></div>`).join('');$('#dyes').querySelectorAll('[data-d]').forEach(e=>e.onclick=()=>{P.dye=e.dataset.d||null;toast(P.dye?'ย้อมสีชุดแล้ว':'ล้างสีย้อม');renderStats();save()});eqRender()}
 // ===================== EQUIPMENT PANEL =====================
-const SLOTL={head:'หมวก',hair:'ทรงผม',top:'เสื้อ',legs:'กางเกง',body:'ชุดยาว',cape:'ผ้าคลุม',shoes:'รองเท้า',weapon:'อาวุธ'};
+const SLOTL={head:'หมวก',hair:'ทรงผม',top:'เสื้อ',legs:'กางเกง',body:'ชุดยาว',cape:'ผ้าคลุม',shoes:'รองเท้า',weapon:'อาวุธ',acc:'เครื่องประดับ'};
 const JOBL={knight:'อัศวิน',witch:'จอมเวท',ranger:'นักธนู'};
 const RAR=it=>{const d=ITEMS[it];if(!d.eq)return '';if(d.eq=='body'||/หมวกกบ|หมวกเห็ด|หูกระต่าย|ปีก|ผ้าคลุมดาว/.test(it))return 'fash';if(d.price>=800)return 'epic';if(d.price>=400)return 'rare';return ''};
 const RARL={'':'ธรรมดา',rare:'หายาก',epic:'มหากาพย์',fash:'แฟชั่น'};
@@ -617,22 +812,22 @@ let eqTab='all',eqSel=null;P.seen=P.seen||{};
 function eqRender(){const eqs=Object.keys(ITEMS).filter(i=>ITEMS[i].eq);const owned=eqs.filter(i=>P.inv[i]||Object.values(P.eq).includes(i));$('#collect').textContent=`สะสมแล้ว ${owned.length} / ${eqs.length}`;
   $('#eqjobs').innerHTML=Object.keys(CLASSES).map(k=>`<div class="jchip ${k==P.cls?'on':''}" title="${CLASSES[k].name}">${CLASSES[k].ico}</div>`).join('');
   const fash=Object.keys(COSTUMES);$('#eqfash').innerHTML=fash.map(f=>`<div class="fchip ${(P.inv[f]||P.eq.body==f)?'own':''} ${P.eq.body==f?'on':''}" data-it="${f}">${ITEMS[f].ico}</div>`).join('');$('#eqfash').querySelectorAll('.fchip.own').forEach(e=>e.onclick=()=>{eqSel=e.dataset.it;useItem(eqSel);eqRender()});
-  const slots=[['head',P.eq.head],['hair','ผมทอง'],['top',P.eq.body?null:'เสื้อประจำอาชีพ'],['legs',P.eq.body?null:'กางเกงประจำอาชีพ'],['body',P.eq.body],['cape',P.eq.cape],['shoes',P.eq.body?null:'รองเท้าประจำอาชีพ'],['weapon',P.eq.weapon]];
+  const slots=[['head',P.eq.head],['hair','ผมทอง'],['top',P.eq.body?null:'เสื้อประจำอาชีพ'],['legs',P.eq.body?null:'กางเกงประจำอาชีพ'],['body',P.eq.body],['cape',P.eq.cape],['shoes',P.eq.body?null:'รองเท้าประจำอาชีพ'],['weapon',P.eq.weapon],['acc',P.eq.acc]];
   $('#eqgrid').innerHTML=slots.map(([k,v])=>{const it=ITEMS[v];const ico=it?(ICON[v]||it.ico):(k=='hair'?'💇':'');return `<div class="eqslot ${v?'':'empty'}" data-k="${k}"><small>${SLOTL[k]}</small><div class="ic">${v?ico:'—'}</div><span class="v">${v?v:(P.eq.body&&['top','legs','shoes'].includes(k)?'(อยู่ใต้ชุดยาว)':'ว่าง')}</span></div>`}).join('');
   $('#eqgrid').querySelectorAll('.eqslot').forEach(e=>e.onclick=()=>{const k=e.dataset.k;if(P.eq[k]){eqSel=P.eq[k];eqDetail()}else{eqTab=k;eqRender()}});
   const tabs=[['all','ทั้งหมด'],...Object.entries(SLOTL)];$('#eqtabs').innerHTML=tabs.map(([k,l])=>`<span class="tab ${eqTab==k?'on':''}" data-t="${k}">${l}</span>`).join('');$('#eqtabs').querySelectorAll('.tab').forEach(e=>e.onclick=()=>{eqTab=e.dataset.t;eqRender()});
   const list=eqs.filter(i=>(eqTab=='all'||ITEMS[i].eq==eqTab)&&(P.inv[i]||Object.values(P.eq).includes(i)));
-  $('#eqitems').innerHTML=list.length?list.map(i=>{const d=ITEMS[i];const on=Object.values(P.eq).includes(i);return `<div class="itm ${RAR(i)} ${eqSel==i?'sel':''}" data-it="${i}" title="${i}">${ICON[i]||d.ico}${on?'<span class="chk">✓</span>':''}${!P.seen[i]?'<span class="new">NEW</span>':''}${P.inv[i]>1?`<span class="cnt">${P.inv[i]}</span>`:''}</div>`}).join(''):'<div style="color:#8090a8;font-size:12px;grid-column:1/-1;padding:20px;text-align:center">ยังไม่มีไอเทมหมวดนี้ — หาได้จากมอนสเตอร์และร้านค้า</div>';
+  $('#eqitems').innerHTML=list.length?list.map(i=>{const d=ITEMS[i];const on=Object.values(P.eq).includes(i);const r=RAR(i);return `<div class="itm row-itm ${r} ${eqSel==i?'sel':''}" data-it="${i}" title="${i}"><div class="ii">${ICON[i]||d.ico}${P.inv[i]>1?`<span class="cnt">${P.inv[i]}</span>`:''}</div><div class="it"><b>${i} · <em class="r-${r||'n'}">${RARL[r]}</em></b><small>${STAT(i).join(' · ')||SLOTL[d.eq]||''}</small></div><div class="is">${on?'<span class="chk">✓ สวมอยู่</span>':!P.seen[i]?'<span class="new">NEW</span>':'<span class="lk">›</span>'}</div></div>`}).join(''):'<div style="color:#8090a8;font-size:12px;grid-column:1/-1;padding:20px;text-align:center">ยังไม่มีไอเทมหมวดนี้ — หาได้จากมอนสเตอร์และร้านค้า</div>';
   $('#eqitems').querySelectorAll('.itm').forEach(e=>e.onclick=()=>{const i=e.dataset.it;P.seen[i]=1;if(eqSel==i){useItem(i)}eqSel=i;eqRender()});
   eqDetail();eqStats();eqPreview()}
 function eqDetail(){const b=$('#eqdetail');if(!eqSel||!ITEMS[eqSel]){b.innerHTML='<div class="dn" style="color:#8090a8;font-size:13px">เลือกไอเทมเพื่อดูรายละเอียด</div>';return}const d=ITEMS[eqSel];const on=Object.values(P.eq).includes(eqSel);
-  b.innerHTML=`<div class="dn">${eqSel}</div><div class="dt">${SLOTL[d.eq]||'ไอเทม'} · ${RARL[RAR(eqSel)]}</div><ul>${STAT(eqSel).map(x=>`<li>${x}</li>`).join('')}</ul><div class="dd">${d.desc}</div><div class="de">${on?'✓ สวมอยู่ (คลิกอีกครั้งเพื่อถอด)':'คลิกอีกครั้งเพื่อสวม'}</div>`}
+  const r=RAR(eqSel);b.innerHTML=`<div class="dhero"><div class="dimg">${ICON[eqSel]||d.ico}</div><div class="dside"><div class="dn">${eqSel}</div><span class="dpill r-${r||'n'}">${RARL[r]}</span><div class="dmain">${STAT(eqSel)[0]||SLOTL[d.eq]||''}</div></div></div><div class="dbox"><div class="dbh">📊 ค่าสถานะ · ${SLOTL[d.eq]||'ไอเทม'}</div>${STAT(eqSel).map(x=>`<div class="dbr"><span>${x.split(' ')[0]}</span><b>${x.split(' ').slice(1).join(' ')}</b></div>`).join('')||'<div class="dbr"><span>—</span></div>'}</div><div class="dbtns"><button class="btn ghost" id="eqx">${on?'สวมอยู่':'ยังไม่สวม'}</button><button class="btn" id="eqgo">${on?'ถอดออก':'สวมใส่'}</button></div><div class="dd">❕ ${d.desc}</div>`;$('#eqgo').onclick=()=>{useItem(eqSel);eqRender()}}
 function eqStats(){const w=P.eq.weapon?ITEMS[P.eq.weapon].atk:0,hd=P.eq.head?ITEMS[P.eq.head].def||0:0,bd=P.eq.body?ITEMS[P.eq.body].def||0:0,cd=P.eq.cape?ITEMS[P.eq.cape].def||0:0;
-  const rows=[['HP',P.mhp],['SP',P.mmp],['ATK',`${P.atk} + ${Math.round(w)}–${Math.round(w*1.3)}`],['MATK',`${Math.round(P.atk*(P.cls=='witch'?1.5:.3))}–${Math.round(P.atk*(P.cls=='witch'?1.8:.4))}`],['DEF',`${P.def} + ${hd+bd+cd}`],['MDEF',`${Math.floor(P.def/2)} + ${Math.floor(hd/2)}`],['HIT',80+P.blv*2],['FLEE',60+P.blv*2+(P.buffs.spd?30:0)],['CRI',(3+(P.eq.head&&/LUK/.test(ITEMS[P.eq.head].desc)?2:0))+'%'],['ASPD',150+(P.cls=='ranger'?8:0)]];
+  const rows=[['HP',P.mhp],['SP',P.mmp],['ATK',`${P.atk} + ${Math.round(w)}–${Math.round(w*1.3)}`],['MATK',`${Math.round(P.atk*(P.cls=='witch'?1.5:.3))}–${Math.round(P.atk*(P.cls=='witch'?1.8:.4))}`],['DEF',`${P.def} + ${hd+bd+cd+(P.eq.acc?ITEMS[P.eq.acc].def:0)}`],['MDEF',`${Math.floor(P.def/2)} + ${Math.floor(hd/2)}`],['HIT',80+P.blv*2],['FLEE',60+P.blv*2+(P.buffs.spd?30:0)],['CRI',(3+(P.eq.head&&/LUK/.test(ITEMS[P.eq.head].desc)?2:0))+'%'],['ASPD',150+(P.cls=='ranger'?8:0)]];
   $('#statsbody').innerHTML=rows.map(([k,v])=>`<div class="row"><span>${k}</span><b>${v}</b></div>`).join('')}
 function eqPreview(){const c=$('#eqcv'),g=c.getContext('2d');g.clearRect(0,0,300,300);const key='p_'+P.cls+'_'+(P.eq.head||'')+'_'+(P.eq.body||'')+'_'+(P.eq.weapon||'')+'_'+(P.eq.cape||'')+'_'+(P.dye||'');
   const sh=getSheet(key,humanoid({...SKINS[P.cls],costume:P.eq.head,body:P.eq.body,weaponSkin:P.eq.weapon,dye:P.dye,wings:P.eq.cape=='ปีกนางฟ้า'?'angel':P.eq.cape=='ปีกค้างคาว'?'bat':null,capeSkin:P.eq.cape=='ผ้าคลุมดาว'?'star':null}));
-  const fr=sh.idle[0][Math.floor(lastT/1000*ANIM.idle.fps)%ANIM.idle.n];g.fillStyle='rgba(0,0,0,.35)';g.beginPath();g.ellipse(150,262,60,14,0,0,7);g.fill();g.imageSmoothingEnabled=true;g.imageSmoothingQuality='high';g.drawImage(fr,150-UW*1.4,270-(UH-8)*2.8,UW*2.8,UH*2.8);
+  const fr=sh.idle[0][Math.floor(lastT/1000*ANIM.idle.fps)%ANIM.idle.n];g.fillStyle='rgba(0,0,0,.35)';g.beginPath();g.ellipse(150,262,60,14,0,0,7);g.fill();g.imageSmoothingEnabled=true;g.imageSmoothingQuality='high';blit(g,fr,150-UW*1.4,270-(UH-8)*2.8,UW*2.8,UH*2.8);
   if($('#p-stats').classList.contains('open'))requestAnimationFrame(eqPreview)}
 
 function renderPet(){$('#petbody').innerHTML=`<div style="font-size:48px;text-align:center">${pet.ico}</div><div class="row"><span>ชื่อ</span><b>${pet.name}</b></div><div class="row"><span>Level</span><b>${pet.lv}</b></div><div class="row"><span>ความหิว</span><b>${Math.round(pet.hunger)}%</b></div><p style="color:var(--muted);margin-top:8px">สัตว์เลี้ยงเดินตาม เก็บไอเทมให้อัตโนมัติ และเลเวลอัพจากการล่าของคุณ (ให้อาหารด้วย 🍖 Pet Food)</p>`}
@@ -649,7 +844,12 @@ document.querySelectorAll('[data-x]').forEach(e=>e.onclick=closePanels);
 // ===================== MESSAGES =====================
 let toastT;function toast(t){const e=$('#toast');e.textContent=t;e.style.opacity=1;clearTimeout(toastT);toastT=setTimeout(()=>e.style.opacity=0,1400)}
 let castT;function cast(h){const e=$('#cast');e.innerHTML=h;e.style.opacity=1;clearTimeout(castT);castT=setTimeout(()=>e.style.opacity=0,5000)}
-function chat(k,t,who){const c=$('#chat');const p=document.createElement('p');p.className=k;p.innerHTML=k=='sys'?'<b>System</b> '+t:k=='kill'?t:`<span class="who">${who}</span>: ${t}`;c.appendChild(p);while(c.children.length>6)c.removeChild(c.firstChild)}
+let chatF='all';
+function chat(k,t,who){const c=$('#chatlog');const p=document.createElement('p');p.className=k;const cat=(k=='sys'||k=='kill')?'sys':(who==P.name?'gen':'map');p.dataset.c=cat;if(chatF!='all'&&chatF!=cat)p.classList.add('hide');p.innerHTML=k=='sys'?'<b>System</b> '+t:k=='kill'?t:`<span class="tag">[${cat=='gen'?'ทั่วไป':'แมพ'}]</span><span class="who">${who}</span>: ${t}`;c.appendChild(p);while(c.children.length>14)c.removeChild(c.firstChild)}
+document.querySelectorAll('#chattabs span').forEach(s=>s.onclick=()=>{chatF=s.dataset.f;document.querySelectorAll('#chattabs span').forEach(x=>x.classList.toggle('on',x==s));document.querySelectorAll('#chatlog p').forEach(p=>p.classList.toggle('hide',chatF!='all'&&p.dataset.c!=chatF))});
+$('#chatbox').addEventListener('keydown',e=>{e.stopPropagation();if(e.key=='Enter'){const v=e.target.value.trim();if(v)chat('say',v.replace(/[<>&]/g,''),P.name);e.target.value='';e.target.blur()}else if(e.key=='Escape')e.target.blur()});
+addEventListener('keydown',e=>{if(e.key=='Enter'&&document.activeElement.tagName!='INPUT'&&$('#start').style.display=='none'){e.preventDefault();$('#chatbox').focus()}});
+const BUFICO={def:'🛡️',spd:'💨',atk:'⚔️'};let hudBk='';
 const CHATS=['ใครรับ Iron Shard บ้าง 15z','มีปาร์ตี้ล่าคิงมั้ย','ขายหมวก King Crown 900z','เลเวลอัพแล้ว!! 🎉','ตรงมุมขวาบนบัฟดีมาก','GG ทุกคน','หาไกด์ Ember Witch หน่อย'];
 
 // ===================== SAVE =====================
@@ -680,7 +880,7 @@ function update(dt){
   // mobs
   for(const m of mobs){if(m.dead)continue;const mob=MOBS[m.type];m.hit-=dt;const d=Math.hypot(P.x-m.x,P.y-m.y);
     if(d<140||m.aggro&&d<380)m.aggro=true;else m.aggro=false;
-    if(m.aggro){if(d>mob.r+18){m.vx=(P.x-m.x)/d;m.vy=(P.y-m.y)/d}else{m.vx=m.vy=0;m.wt-=dt;if(m.wt<=0){m.wt=1.2;m.atkT=.5;m.dir=dirOf(P.x-m.x,P.y-m.y);const def=P.def+(P.eq.head?ITEMS[P.eq.head].def:0)+(P.buffs.def?15:0);const dmg=Math.max(1,Math.round(mob.atk*(0.8+Math.random()*.4)-def*.6));P.hp-=dmg;fx.push({x:P.x,y:P.y-30,t:.7,txt:'-'+dmg,col:'#ff6b6b'});if(P.hp<=0)die()}}}
+    if(m.aggro){if(d>mob.r+18){m.vx=(P.x-m.x)/d;m.vy=(P.y-m.y)/d}else{m.vx=m.vy=0;m.wt-=dt;if(m.wt<=0){m.wt=1.2;m.atkT=.5;m.dir=dirOf(P.x-m.x,P.y-m.y);const def=P.def+(P.eq.head?ITEMS[P.eq.head].def:0)+(P.eq.acc?ITEMS[P.eq.acc].def:0)+(P.buffs.def?15:0);const dmg=Math.max(1,Math.round(mob.atk*(0.8+Math.random()*.4)-def*.6));P.hp-=dmg;fx.push({x:P.x,y:P.y-30,t:.7,txt:'-'+dmg,col:'#ff6b6b'});if(P.hp<=0)die()}}}
     else{m.wt-=dt;if(m.wt<=0){m.wt=1+Math.random()*3;if(Math.random()<.5){m.vx=m.vy=0}else{const a=Math.random()*6.28;m.vx=Math.cos(a);m.vy=Math.sin(a)}}}
     if(m.vx||m.vy)m.dir=dirOf(m.vx,m.vy);m.atkT=(m.atkT||0)-dt;const s=mob.spd*60*dt;const nx=m.x+m.vx*s,ny=m.y+m.vy*s;if(!solid(nx,m.y))m.x=nx;else m.vx=-m.vx;if(!solid(m.x,ny))m.y=ny;else m.vy=-m.vy;}
   // projectiles
@@ -700,7 +900,8 @@ function update(dt){
   bossTimer-=dt;if(bossTimer<=0){bossTimer=300;const bt=MAPS[curMap].boss;if(!mobs.some(m=>m.type==bt)){spawn(bt);chat('sys',MOBS[bt].name+' ตื่นแล้ว!');cast(`<b style="color:#ff5a4a">MVP</b> ราชาสไลม์ปรากฏตัวที่ริมบึง!`);chat('sys','บอสราชาสไลม์ปรากฏตัวแล้ว!')}}
   // HUD
   $('#hpf').style.width=(P.hp/P.mhp*100)+'%';$('#mpf').style.width=(P.mp/P.mmp*100)+'%';$('#hpt').textContent=Math.round(P.hp)+' / '+P.mhp;$('#mpt').textContent=Math.round(P.mp)+' / '+P.mmp;const bp=P.exp/needExp(P.blv)*100,jp=P.jexp/(needExp(P.jlv)*.8)*100;$('#xpb1').style.width=bp+'%';$('#xpt1').textContent=bp.toFixed(1)+'%';$('#xpb2').style.width=jp+'%';$('#xpt2').textContent=jp.toFixed(1)+'%';$('#stpts').textContent=(P.blv-1)*3;document.querySelectorAll('.sk.item[data-item]').forEach(e=>{if(e.dataset.item)e.querySelector('.n').textContent=P.inv[e.dataset.item]||0});
-  $('#blv').textContent=P.blv;$('#jlv').textContent=P.jlv;$('#expbar').style.width=(P.exp/needExp(P.blv)*100)+'%';$('#z').textContent=P.z.toLocaleString();$('#kills').textContent=P.kills;
+  $('#blv').textContent=P.blv;$('#jlv').textContent=P.jlv;$('#expbar').style.width=(P.exp/needExp(P.blv)*100)+'%';$('#z').textContent=P.z.toLocaleString();$('#kills').textContent=P.kills;$('#gold2').textContent=P.z.toLocaleString();
+  {const bk=Object.keys(P.buffs).map(b=>b+Math.ceil(P.buffs[b])).join();if(bk!=hudBk){hudBk=bk;$('#buffs').innerHTML=Object.keys(P.buffs).map(b=>`<div class="bf" title="${b}">${BUFICO[b]||'✨'}<b>${Math.ceil(P.buffs[b])}</b></div>`).join('')}}
   const q=QUESTS[questIdx];$('#qtext').innerHTML=q?`${q.t}<div class="o">Defeat ${q.need} ${MOBS[q.mob].name} <b>(${qProg}/${q.need})</b></div>`:'ครบทุกเควสแล้ว';
   document.querySelectorAll('.sk .cd').forEach((e,i)=>{e.style.transform=`scaleY(${P.cds[i]/CLASSES[P.cls].skills[i].cd})`;const n=e.parentElement.querySelector('.cdn');if(n)n.textContent=P.cds[i]>0?(P.cds[i]<3?P.cds[i].toFixed(1):Math.ceil(P.cds[i])):''});$('#online').textContent=online;
   {const t=P.target;const tf=$('#target');if(t&&!t.dead){tf.style.display='block';const mb=MOBS[t.type];$('#tico').textContent=mb.ico;$('#tn').textContent=mb.name;$('#tlv').textContent='Lv '+mb.lv;$('#thf').style.width=(t.hp/t.mhp*100)+'%';$('#tht').textContent=Math.round(t.hp/t.mhp*100)+'%'}else tf.style.display='none';
@@ -719,7 +920,14 @@ var draw=function(){
   fx.filter(f=>f.ring).forEach(f=>{ctx.save();ctx.translate(f.x-cam.x,f.y-cam.y);ctx.scale(1,.5);ctx.globalAlpha=Math.min(1,f.t*2);ctx.strokeStyle=f.col;ctx.lineWidth=3;ctx.beginPath();ctx.arc(0,0,f.ring*(1-f.t*1.2)+8,0,7);ctx.stroke();ctx.rotate(lastT/400);ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(0,0,f.ring*.7,0,7);ctx.stroke();for(let i=0;i<6;i++){ctx.beginPath();ctx.moveTo(Math.cos(i*1.047)*f.ring*.7,Math.sin(i*1.047)*f.ring*.7);ctx.lineTo(Math.cos((i+2)*1.047)*f.ring*.7,Math.sin((i+2)*1.047)*f.ring*.7);ctx.stroke()}ctx.restore()});
   ents.sort((a,b)=>a.y-b.y).forEach(e=>e.f());
   projs.forEach(p=>{ctx.fillStyle=p.col;ctx.shadowColor=p.col;ctx.shadowBlur=12;ctx.beginPath();ctx.arc(p.x-cam.x,p.y-cam.y,p.big?6:3.5,0,7);ctx.fill();ctx.shadowBlur=0});
-  fx.filter(f=>!f.ring).forEach(f=>{ctx.globalAlpha=Math.min(1,f.t*1.5);const big=f.col=='#e0a63c';ctx.font=(big?'800 26px':'700 18px')+' Kanit,sans-serif';ctx.textAlign='center';ctx.lineWidth=4;ctx.strokeStyle='#1a110d';ctx.strokeText(f.txt,f.x-cam.x,f.y-cam.y);ctx.fillStyle=big?'#ffe27a':f.col;ctx.fillText(f.txt,f.x-cam.x,f.y-cam.y);ctx.globalAlpha=1});
+  fx.filter(f=>!f.ring).forEach(f=>{if(f.t0==null)f.t0=f.t;const age=f.t0-f.t,num=typeof f.txt=='number'||/^-\d+$/.test(f.txt),big=f.col=='#e0a63c'&&num;
+    const pop=age<.12?.6+age/.12*.8:age<.22?1.4-(age-.12)/.1*.4:1;const x=f.x-cam.x,y=f.y-cam.y-age*28;
+    ctx.save();ctx.globalAlpha=Math.min(1,f.t*2);ctx.translate(x,y);ctx.scale(pop,pop);ctx.textAlign='center';ctx.textBaseline='middle';ctx.lineJoin='round';
+    const sz=big?36:num?26:17;ctx.font=`700 ${sz}px Fredoka,Mitr,sans-serif`;
+    if(big){ctx.save();ctx.rotate(age*2);ctx.beginPath();for(let i=0;i<16;i++){const r=i%2?16:30,a=i/16*Math.PI*2;ctx.lineTo(Math.cos(a)*r,Math.sin(a)*r)}ctx.closePath();ctx.fillStyle='rgba(255,150,40,.9)';ctx.strokeStyle='#0c1328';ctx.lineWidth=3;ctx.fill();ctx.stroke();ctx.restore()}
+    ctx.lineWidth=big?8:num?7:5;ctx.strokeStyle='#0c1328';ctx.strokeText(f.txt,0,0);
+    let fill=f.col;if(num){const g=ctx.createLinearGradient(0,-sz/2,0,sz/2);if(big){g.addColorStop(0,'#fff6b0');g.addColorStop(.5,'#ffd23a');g.addColorStop(1,'#ff8a1a')}else if(f.col=='#fff'){g.addColorStop(0,'#fff');g.addColorStop(1,'#cfe4ff')}else{g.addColorStop(0,f.col);g.addColorStop(1,f.col)}fill=g}
+    ctx.fillStyle=fill;ctx.fillText(f.txt,0,0);ctx.restore()});
   drawNight();drawMini();
 }
 function shadow(x,y,r){ctx.fillStyle='rgba(0,0,0,.45)';ctx.beginPath();ctx.ellipse(x,y+4,r,r*.45,0,0,7);ctx.fill()}
@@ -741,7 +949,19 @@ const SS=Math.min(4,Math.max(2,Math.ceil(devicePixelRatio*2))); // supersample: 
 const FW=UW*SS,FH=UH*SS;
 const ANIM={idle:{n:8,fps:6},walk:{n:16,fps:20},attack:{n:12,fps:24}};
 const sheets={};
-function getSheet(kind,paint){ if(sheets[kind])return sheets[kind]; const sh={};
+// ---- PNG sprite packs (made by tools/blender/render_sprites.py, registered in sprites/packs.js) ----
+// A pack replaces the vector painter for one character id. Player packs use the class id (knight/ranger/witch).
+const SPRITE_PACKS={};setTimeout(()=>(window.__spriteQueue||[]).forEach(([n,m])=>registerSpritePack(n,m)));
+function registerSpritePack(name,m){const pk={...m,ready:false,img:{}};let left=0;
+  for(const a in m.anims){left++;const im=new Image();im.onload=()=>{if(--left==0){pk.ready=true;console.log('sprite pack ready:',name)}};im.onerror=()=>console.warn('sprite pack image missing:',m.anims[a].file);im.src=m.anims[a].file+(m.v?'?v='+m.v:'');pk.img[a]=im}
+  SPRITE_PACKS[name]=pk}
+function packFor(kind){const id=kind.startsWith('p_')?kind.split('_')[1]:kind;const pk=SPRITE_PACKS[id];return pk&&pk.ready?pk:null}
+function packSheet(pk){if(pk.sheet)return pk.sheet;const sh={};const base=pk.anims.idle?'idle':Object.keys(pk.anims)[0];
+  for(const a in ANIM){const src=pk.anims[a]?a:base,n=pk.anims[src].n;sh[a]=[];
+    for(let d=0;d<8;d++){sh[a][d]=[];for(let f=0;f<ANIM[a].n;f++){const k=Math.floor(f/ANIM[a].n*n);sh[a][d][f]={img:pk.img[src],x:k*pk.fw,y:d*pk.fh,w:pk.fw,h:pk.fh}}}}
+  return pk.sheet=sh}
+function blit(g,fr,dx,dy,dw,dh){if(fr.img)g.drawImage(fr.img,fr.x,fr.y,fr.w,fr.h,dx,dy,dw,dh);else g.drawImage(fr,dx,dy,dw,dh)}
+function getSheet(kind,paint){ const pk=packFor(kind);if(pk)return packSheet(pk); if(sheets[kind])return sheets[kind]; const sh={};
   for(const a in ANIM){sh[a]=[];for(let d=0;d<8;d++){sh[a][d]=[];for(let f=0;f<ANIM[a].n;f++){
     const c=document.createElement('canvas');c.width=FW;c.height=FH;const g=c.getContext('2d');
     g.imageSmoothingEnabled=true;g.lineJoin='round';g.lineCap='round';
@@ -1000,7 +1220,7 @@ function mushking(){return (g,d,anim,p,f)=>{const [fx,fy]=DV[d];const front=fy>=
 const PAINT={slime:slime(false),king:slime(true),bee:bee(),scarecrow:scarecrow(),glowslime:slime(false,'#5ad8ff'),treant:treant(),moth:moth(),mushking:mushking(),pet:chick()};
 function drawSprite(kind,paint,x,y,dir,anim,t,scale=1,flash=false){const sh=getSheet(kind,paint);const a=ANIM[anim];const fr=sh[anim][dir][Math.floor(t*a.fps)%a.n];
   ctx.save();if(flash)ctx.filter='brightness(1.8) saturate(.5)';ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';
-  ctx.drawImage(fr,x-UW/2*scale,y-(UH-8)*scale,UW*scale,UH*scale);ctx.restore()}
+  blit(ctx,fr,x-UW/2*scale,y-(UH-8)*scale,UW*scale,UH*scale);ctx.restore()}
 
 // ---- sprite-based entity renderers
 function drawPlayer(){const sx=P.x-cam.x,sy=P.y-cam.y;shadow(sx,sy,14);
@@ -1027,6 +1247,9 @@ function drawPet(){const sx=pet.x-cam.x,sy=pet.y-cam.y;shadow(sx,sy,8);const mv=
 
 // periodic ambient chat
 setInterval(()=>{if(P.cls&&Math.random()<.5)chat('u',CHATS[Math.floor(Math.random()*CHATS.length)],FAKE[Math.floor(Math.random()*FAKE.length)])},7000);
+
+// auto-start (class-select screen disabled): resume saved character or default Ranger
+(()=>{let c='ranger',n='Adventurer';try{const d=JSON.parse(localStorage.getItem('emberfall'));if(d&&d.P&&CLASSES[d.P.cls]){c=d.P.cls;n=d.P.name||n}}catch(e){}P.name=n;start(c)})();
 </script>
 </body>
 </html>
