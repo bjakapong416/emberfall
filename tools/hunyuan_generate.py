@@ -71,10 +71,41 @@ print(f"hunyuan_generate: models ready in {time.time() - t0:.0f}s")
 
 image = Image.open(img_path)
 image = BackgroundRemover()(image.convert("RGB")) if image.mode != "RGBA" else image
-out = shape(image=image, num_inference_steps=a.steps, guidance_scale=a.guidance,
-            generator=torch.Generator().manual_seed(a.seed), octree_resolution=a.octree,
-            num_chunks=200000, output_type="mesh")
-mesh = export_to_trimesh(out)[0]
+# Hunyuan composites the input on WHITE: white objects (chef hat, fur trim) vanish. Grey the near-white parts
+# for the shape pass only - the texture pass still gets the original colours.
+import numpy as np
+arr = np.asarray(image.convert("RGBA")).astype(np.float32)
+rgb, al = arr[..., :3], arr[..., 3:]
+mx, mn = rgb.max(-1, keepdims=True), rgb.min(-1, keepdims=True)
+white = (mn > 215) & ((mx - mn) < 25) & (al > 10)
+if white.mean() > 0.002:
+    rgb = np.where(white, rgb * 0.8, rgb)
+    print(f"hunyuan_generate: {white[..., 0].sum() / max(1, (al[..., 0] > 10).sum()):.0%} of the item is near-white: greyed for the shape pass")
+shape_image = Image.fromarray(np.concatenate([rgb, al], -1).clip(0, 255).astype(np.uint8), "RGBA")
+def gen(seed, guidance, steps):
+    out = shape(image=shape_image, num_inference_steps=steps, guidance_scale=guidance,
+                generator=torch.Generator().manual_seed(seed), octree_resolution=a.octree,
+                num_chunks=200000, output_type="mesh")
+    m = export_to_trimesh(out)[0]
+    if m is None or len(m.faces) == 0:
+        raise ValueError("empty mesh")
+    return m
+# some images give an empty volume with some seeds: fall back to the standard decoder, then to other seeds/settings
+attempts = [(a.seed, a.guidance, a.steps), (7, 7.5, 50), (2024, 3.5, 30), (99, 5.0, 40)]
+mesh, fast = None, "turbo" in a.subfolder
+for n, (sd, gd, st) in enumerate(attempts):
+    for _ in range(2):
+        try:
+            mesh = gen(sd, gd, st); break
+        except (IndexError, RuntimeError, ValueError, AttributeError) as e:
+            if fast:
+                print(f"hunyuan_generate: fast decoder failed ({type(e).__name__}), switching to the standard volume decoder")
+                shape.vae.enable_flashvdm_decoder(enabled=False); fast = False; continue
+            print(f"hunyuan_generate: attempt {n + 1} (seed {sd}) gave no shape ({type(e).__name__})")
+            break
+    if mesh is not None: break
+if mesh is None:
+    raise SystemExit("hunyuan_generate: no shape after all attempts - try another image")
 mesh = FloaterRemover()(mesh)
 mesh = DegenerateFaceRemover()(mesh)
 mesh = FaceReducer()(mesh, max_facenum=a.faces)

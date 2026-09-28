@@ -8,6 +8,7 @@ One command: character image -> sprites in the game.
 Steps: background cutout (+ stage art and portrait for base packs) -> Hunyuan3D-2 GLB -> auto-rig -> 288 sprite frames.
 """
 import argparse, os, subprocess, sys, time
+sys_stdout_utf8 = __import__("sys").stdout.reconfigure(encoding="utf-8", errors="replace")   # Thai names on a cp1252 console
 
 ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
 BLENDER = os.environ.get("BLENDER", r"C:\Program Files\Blender Foundation\Blender 5.2\blender.exe")

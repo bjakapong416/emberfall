@@ -4,3 +4,5 @@ node_modules/
 # rigged working files - regenerate with tools/blender/rig_static_model.py
 tools/blender/*_ai.blend
 __pycache__/
+tools/_build_log*.txt
+tools/blender/_item_tmp.blend

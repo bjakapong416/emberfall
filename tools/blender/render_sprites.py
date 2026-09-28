@@ -99,6 +99,7 @@ def char_meshes():
 
 
 def char_height(meshes):
+    meshes = [o for o in meshes if not o.name.startswith("Item")]   # equipment must not change the framing of a layer
     zs = []
     dg = bpy.context.evaluated_depsgraph_get()
     for o in meshes:
