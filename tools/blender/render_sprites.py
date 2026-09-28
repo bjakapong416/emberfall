@@ -16,6 +16,8 @@ Options (after the "--"):
   --elev DEG         camera elevation in degrees (default 30)
   --fill F           how much of the frame height the character fills, 0..1 (default 0.72)
   --preview          only render a strip of 5 directions (idle) to sprites/<name>/preview.png
+  --hide A,B         objects left out of this render (e.g. Hair for the body layer)
+  --holdout A,B      objects that only occlude (e.g. Character for the hair layer)
   --mirror           render 5 directions and mirror the other 3 (faster, for symmetric characters)
   --no-toon          keep the original materials (skip cel shading)
   --outline W        outline width as a fraction of character height (default 0.012, 0 = off)
@@ -37,7 +39,7 @@ FOOT_FROM_TOP = 0.92  # game draws the frame with the feet 8 of 100 units above 
 def parse_args():
     argv = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
     a = {"name": None, "out": None, "idle": None, "walk": None, "attack": None, "size": "320x400",
-         "elev": 30.0, "fill": 0.72, "mirror": False, "preview": False, "toon": True, "outline": 0.012}
+         "elev": 30.0, "fill": 0.72, "mirror": False, "preview": False, "hide": "", "holdout": "", "toon": True, "outline": 0.012}
     i = 0
     while i < len(argv):
         k = argv[i].lstrip("-").replace("-", "_")
@@ -264,6 +266,11 @@ def main():
     print("render_sprites: rig =", rig.name if rig else None, {k: (v.name if v else None) for k, v in actions.items()})
 
     meshes = char_meshes()
+    # layered sprites: --hide leaves objects out, --holdout keeps them as invisible occluders (same framing for every layer)
+    for n in filter(None, a["hide"].split(",")):
+        bpy.data.objects[n].hide_render = True
+    for n in filter(None, a["holdout"].split(",")):
+        bpy.data.objects[n].is_holdout = True
     assign_action(rig, actions["idle"])
     sc.frame_set(int(actions["idle"].frame_range[0]) if actions["idle"] else sc.frame_start)
     height = char_height(meshes)
